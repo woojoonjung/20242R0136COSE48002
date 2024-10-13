@@ -4,22 +4,55 @@
   align-items: center;
   max-width: 600px;
   margin: auto;
+  height: calc(100vh - 100px); /* 헤더와 입력창을 제외한 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  padding-bottom: 20px; /* 스크롤 시 입력창과의 간격 추가 */
 }
-
 .chat-input {
   display: flex;
-  margin-top: 10px;
+  align-items: center; /* 수직 가운데 정렬 */
+  width: 100%; /* 입력창이 채팅창 전체 너비를 차지 */
+  padding: 10px;
+  position: fixed;
+  bottom: 0; /* 하단에 고정 */
+  left: 0;
+  right: 0;
+  background-color: white; /* 배경색을 흰색으로 설정 */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 하단 그림자 효과 */
+}
+
+.image-input-container {
+  margin: 10px 0; /* 이미지 입력 부분과 다른 요소 간 간격 조정 */
+}
+
+.image-input {
+  margin-right: 10px; /* 이미지 입력창과 채팅 입력창 간 간격 */
+  border: 1px solid #ccc; /* 테두리 추가 */
+  padding: 5px; /* 패딩 추가 */
+  border-radius: 4px; /* 모서리 둥글게 */
+  cursor: pointer; /* 포인터 커서 */
 }
 
 .chat-input input {
   flex: 1;
   padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px; /* 좌측만 둥근 모서리 */
 }
+
 
 .chat-input button {
-  padding: 10px;
+  padding: 10px 20px; /* 버튼 크기를 조금 더 키움 */
+  background-color: #1a1a1a; /* 버튼 배경색 */
+  color: white; /* 텍스트 색상 */
+  border: 1px solid #1a1a1a;
+  border-radius: 0 5px 5px 0; /* 우측만 둥근 모서리 */
+  cursor: pointer;
 }
 
+.chat-input button:hover {
+  background-color: #333; /* 버튼에 호버 시 약간 더 밝은 색상 */
+}
 .chat-response {
   width: 100%;
   margin: 5px 0;
@@ -29,13 +62,34 @@
   padding: 10px;
   border-radius: 5px;
 }
-
 .user-message {
-  background-color: #d1e7dd;
+  background-color: #f5f5f538; /* 밝은 회색 - 사용자 메시지 */
+  color: #333; /* 어두운 회색 텍스트 */
   align-self: flex-end;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* 살짝 그늘 */
+}
+.bot-message {
+  background-color: #1a1a1a; /* 거의 검은색 - 봇 메시지 */
+  color: #f5f5f5; /* 흰색 텍스트 */
+  align-self: flex-start;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* 살짝 더 짙은 그늘 */
 }
 
-.bot-message {
-  background-color: #f8d7da;
-  align-self: flex-start;
+.App-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #1a1a1a; /* 헤더 배경색 (어두운 톤) */
+  color: #fff; /* 텍스트 색상 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 헤더 그늘 */
+}
+
+.project-logo {
+  width: 100px; /* 로고 크기 */
+  height: auto;
+  margin-right: 20px; /* 로고와 제목 사이 간격 */
 }
