@@ -1,0 +1,6 @@
+faiss-gpu
+transformers
+sentence-transformers
+torch
+tensorflow
+dotenv
