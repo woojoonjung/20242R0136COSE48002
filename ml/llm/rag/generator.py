@@ -1,4 +1,4 @@
-from transformers import LlamaTokenizer, LlamaForCausalLM, LlamaTokenizerFast
+from transformers import LlamaForCausalLM, LlamaTokenizerFast
 from huggingface_hub import login
 from dotenv import load_dotenv
 import os
@@ -8,7 +8,7 @@ load_dotenv()
 hf_token = os.getenv("HF_TOKEN")
 login(token=hf_token)
 
-model_name = "meta-llama/Meta-Llama-3-8B-Instruct"
+model_name = "Bllossom/llama-3.2-Korean-Bllossom-3B"
 
 class Generator:
     def __init__(self):
