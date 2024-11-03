@@ -3,7 +3,7 @@ import torch
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModel
-import utils
+# from ml.llm.rag.utils import load_documents, google_image_search
 
 class Retriever:
     def __init__(self, documents):
@@ -11,9 +11,7 @@ class Retriever:
         self.tokenizer = AutoTokenizer.from_pretrained('jhgan/ko-sroberta-multitask')
         self.model = AutoModel.from_pretrained('jhgan/ko-sroberta-multitask').to("cuda")
         self.documents = documents
-        self.embedded_documents = self.embed_text(self.documents)
-        d = self.embedded_documents[0].shape[0]
-        self.index = faiss.IndexFlatL2(d)
+        self.index = faiss.IndexFlatL2(768)
 
     def embed_text(self, text):
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True).to("cuda")
@@ -22,7 +20,8 @@ class Retriever:
         return embeddings.squeeze().cpu().numpy()
 
     def index_documents(self):
-        self.index.add(self.embedded_documents)
+        embedded_documents = self.embed_text(self.documents)
+        self.index.add(embedded_documents)
 
     def retrieve(self, query, top_k=5):
         query_embedding = self.embed_text(query).reshape(1,-1).astype('float32')
