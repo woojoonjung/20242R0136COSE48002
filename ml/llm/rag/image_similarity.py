@@ -1,8 +1,10 @@
 import numpy as np
+import sys, os
+sys.path.append(os.path.abspath("/workspace/capston"))
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
-from utils import download_image, preprocess_image
+from ml.llm.rag.utils import download_image, preprocess_image
 
 class ImageSimilarity:
     def __init__(self):

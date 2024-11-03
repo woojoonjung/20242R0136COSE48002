@@ -1,4 +1,4 @@
-import os
+import os, json
 import requests
 from PIL import Image
 from io import BytesIO
@@ -6,12 +6,9 @@ import numpy as np
 
 def load_documents(directory_path):
     # Load all documents from a specified directory
-    documents = []
-    for filename in os.listdir(directory_path):
-        if filename.endswith(".txt"):
-            with open(os.path.join(directory_path, filename), 'r') as file:
-                documents.append(file.read())
-    return documents
+    with open(directory_path, 'r') as file:
+        data = json.load(file)
+    return data
 
 def google_image_search(query, api_key, cse_id, num_results=5):
     url = "https://www.googleapis.com/customsearch/v1"
