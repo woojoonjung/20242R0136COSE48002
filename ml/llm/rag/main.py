@@ -38,17 +38,22 @@ def main(query,query_img):
     image_sim = ImageSimilarity()
 
     retrieved_docs = retriever.retrieve(query)
+    retrieved_imgs = []
+    pairs = []
+
     for disease in retrieved_docs:
         google_query = disease[0]
         api_key = os.getenv("API_KEY")
         cse_id = os.getenv("CSE_ID")
-        retrieved_imgs = google_image_search(google_query, api_key, cse_id)
-        results = image_sim.compare_images(query_img, retrieved_imgs)
+        retrieved_imgs += utils.google_image_search(google_query, api_key, cse_id)
+        pairs += [(disease, img_url) for img_url in retrieved_imgs]
+    
+    results = image_sim.compare_images(query_img, retrieved_imgs)
+    diagnosis = next(pair[0] for pair in pairs if pair[1] == results[0])
 
-    diagnosis = "지루 피부염"
     context = find_entity_by_name(documents, diagnosis)
     context = str(context)
-        
+
     # Generate response based on retrieved documents
     response = generator.generate_response(context, query)
     return response
