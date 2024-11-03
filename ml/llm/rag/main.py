@@ -1,24 +1,40 @@
-from retriever import Retriever
-from generator import Generator
-import utils
-from image_similarity import ImageSimilarity
+import sys ,  os
+sys.path.append(os.path.abspath("/workspace/capston"))
+
+from ml.llm.rag.retriever import Retriever
+from ml.llm.rag.generator import Generator
+from ml.llm.rag.utils import load_documents, google_image_search
+from ml.llm.rag.image_similarity import ImageSimilarity
 from dotenv import load_dotenv
-import os
+
 
 load_dotenv()
 
-def main():
+
+
+def find_entity_by_name(data, name):
+    for entity in data:
+        if name in entity.get('name'):
+            return entity
+    return None
+
+
+def main(query,query_img):
+    # Load or define your dataset for retrieval
+    
+    asan_loc = "/workspace/capston/ml/llm/data/disease_details.json"
+
+    documents = load_documents(asan_loc)
+    documents = str(documents)
+    # print("!!!!!!!!!!!!!!!!!!!!!!!!",documents)
     # Initialize Retriever and Generator
-    retriever = Retriever()
+    retriever = Retriever(documents)
     generator = Generator()
 
-    # Load or define your dataset for retrieval
-    asan_loc = "/Users/woojunjung/drsnap/ml/llm/data/asan_details.json"
-    documents = utils.load_documents(asan_loc)
     retriever.index_documents(documents)
 
-    query = "피부가 붉고, 기름진 각질이 생겨 간지러워요."
-    query_img = utils.load_image("/Users/woojunjung/drsnap/ml/llm/data/test.png")
+    # query = "피부가 붉고, 기름진 각질이 생겨 간지러워요."
+    # query_img = load_image("workspace/ml/llm/data/test.png")
     image_sim = ImageSimilarity()
 
     retrieved_docs = retriever.retrieve(query)
@@ -26,7 +42,7 @@ def main():
         google_query = disease[0]
         api_key = os.getenv("API_KEY")
         cse_id = os.getenv("CSE_ID")
-        retrieved_imgs = utils.google_image_search(google_query, api_key, cse_id)
+        retrieved_imgs = google_image_search(google_query, api_key, cse_id)
         results = image_sim.compare_images(query_img, retrieved_imgs)
 
     diagnosis = "지루 피부염"
@@ -35,13 +51,7 @@ def main():
         
     # Generate response based on retrieved documents
     response = generator.generate_response(context, query)
-    print("Generated Response:", response)
+    return response
 
-def find_entity_by_name(data, name):
-    for entity in data:
-        if name in entity.get('name'):
-            return entity
-    return None
-
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

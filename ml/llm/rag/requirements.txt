@@ -3,4 +3,5 @@ transformers
 sentence-transformers
 torch
 tensorflow
-dotenv
+transformers[torch]
+tokenizers==0.13.3
