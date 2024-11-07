@@ -23,6 +23,7 @@ class Retriever:
         embedded_documents = self.embed_text(self.documents)
         self.index.add(embedded_documents)
 
+
     def retrieve(self, query, top_k=5):
         query_embedding = self.embed_text(query).reshape(1,-1).astype('float32')
         distances, indices = self.index.search(query_embedding, top_k)

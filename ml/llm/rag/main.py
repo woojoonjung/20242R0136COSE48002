@@ -29,7 +29,7 @@ def main(query,query_img):
     # print("!!!!!!!!!!!!!!!!!!!!!!!!",documents)
     # Initialize Retriever and Generator
     retriever = Retriever(documents)
-    generator = Generator()
+    #generator = Generator()
 
     retriever.index_documents(documents)
 
@@ -45,7 +45,7 @@ def main(query,query_img):
         google_query = disease[0]
         api_key = os.getenv("API_KEY")
         cse_id = os.getenv("CSE_ID")
-        retrieved_imgs += utils.google_image_search(google_query, api_key, cse_id)
+        retrieved_imgs += google_image_search(google_query, api_key, cse_id)
         pairs += [(disease, img_url) for img_url in retrieved_imgs]
     
     results = image_sim.compare_images(query_img, retrieved_imgs)
