@@ -1,5 +1,5 @@
 import os, sys
-sys.path.append(os.path.abspath("/workspace/capston"))
+sys.path.append(os.path.abspath("/workspace"))
 import openai
 from fastapi import APIRouter , File, UploadFile, Form
 from pydantic import BaseModel
