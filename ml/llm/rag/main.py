@@ -1,5 +1,5 @@
 import sys ,  os
-sys.path.append(os.path.abspath("/workspace/capston"))
+sys.path.append(os.path.abspath("/workspace"))
 
 from ml.llm.rag.retriever import Retriever
 from ml.llm.rag.generator import Generator

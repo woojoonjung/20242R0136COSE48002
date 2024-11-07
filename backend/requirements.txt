@@ -3,3 +3,10 @@ uvicorn==0.18.3
 fastapi
 pydantic
 openai==0.28
+faiss-gpu
+transformers
+sentence-transformers
+torch
+tensorflow
+transformers[torch]
+tokenizers==0.13.3
