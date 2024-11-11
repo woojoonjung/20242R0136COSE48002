@@ -17,7 +17,9 @@ class Retriever:
         inputs = self.tokenizer(text, return_tensors="pt", truncation=True, padding=True).to("cuda")
         with torch.no_grad():
             embeddings = self.model(**inputs).last_hidden_state.mean(dim=1)
-        return embeddings.squeeze().cpu().numpy()
+            print(embeddings.squeeze().shape, "checking shape")
+            
+        return embeddings.cpu().numpy()
 
     def index_documents(self):
         embedded_documents = self.embed_text(self.documents)

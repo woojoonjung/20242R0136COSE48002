@@ -26,17 +26,18 @@ def main(query,query_img):
 
     documents = load_documents(asan_loc)
     documents = str(documents)
-    # print("!!!!!!!!!!!!!!!!!!!!!!!!",documents)
+    print("!!!!!!!!!!!!!success document!!!!!!!!!!!")
     # Initialize Retriever and Generator
     retriever = Retriever(documents)
-    #generator = Generator()
-
-    retriever.index_documents(documents)
+    print("!!!!!!!!!!!!!success retriever!!!!!!!!!!!")
+    generator = Generator()
+    print("!!!!!!!!!!!!!success generator!!!!!!!!!!!")
+    retriever.index_documents()
 
     # query = "피부가 붉고, 기름진 각질이 생겨 간지러워요."
     # query_img = load_image("workspace/ml/llm/data/test.png")
     image_sim = ImageSimilarity()
-
+    print("similarity class's object is built completely")
     retrieved_docs = retriever.retrieve(query)
     retrieved_imgs = []
     pairs = []
@@ -47,8 +48,9 @@ def main(query,query_img):
         cse_id = os.getenv("CSE_ID")
         retrieved_imgs += google_image_search(google_query, api_key, cse_id)
         pairs += [(disease, img_url) for img_url in retrieved_imgs]
-    
+    print("start comparing image similarity ")
     results = image_sim.compare_images(query_img, retrieved_imgs)
+    print(" comparing image similarity finished completely ")
     diagnosis = next(pair[0] for pair in pairs if pair[1] == results[0])
 
     context = find_entity_by_name(documents, diagnosis)
