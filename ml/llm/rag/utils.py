@@ -1,4 +1,4 @@
-import os, json
+import os, json, io
 import requests
 from PIL import Image
 from io import BytesIO
@@ -36,6 +36,15 @@ def download_image(url):
         return None
 
 def preprocess_image(image, size=(224, 224)):
+    if isinstance(image, bytes):
+        image = Image.open(io.BytesIO(image))
+        print("바이너리")
+    elif hasattr(image, 'file'):  # 파일 객체를 받았을 때
+        image = Image.open(io.BytesIO(image.file.read()))
+        print("file object")
+    elif isinstance(image, str):  # 파일 경로 문자열인 경우
+        image = Image.open(image)
+        print("string")
     image = image.resize(size)
     image = np.array(image) / 255.0  # Normalize pixel values
     return image
