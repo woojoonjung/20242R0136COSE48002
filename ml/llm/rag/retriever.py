@@ -1,7 +1,6 @@
 import faiss
 import torch
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModel
 # from ml.llm.rag.utils import load_documents, google_image_search
 
@@ -24,7 +23,6 @@ class Retriever:
     def index_documents(self):
         embedded_documents = self.embed_text(self.documents)
         self.index.add(embedded_documents)
-
 
     def retrieve(self, query, top_k=5):
         query_embedding = self.embed_text(query).reshape(1,-1).astype('float32')

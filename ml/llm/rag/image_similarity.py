@@ -1,14 +1,16 @@
 import numpy as np
 import sys, os
 sys.path.append(os.path.abspath("/workspace"))
-from tensorflow.keras.applications import VGG16
+from tensorflow.keras.applications import EfficientNetB0
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.preprocessing.image import img_to_array
-from ml.llm.rag.utils import download_image, preprocess_image
+# from ml.llm.rag.utils import download_image, preprocess_image
+from utils import download_image, preprocess_image
+from PIL import Image
 
 class ImageSimilarity:
     def __init__(self):
-        self.model = VGG16(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
+        self.model = EfficientNetB0(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
 
     def extract_features(self,image):
         image = preprocess_image(image)
@@ -21,18 +23,13 @@ class ImageSimilarity:
         similarity = np.dot(embedding1, embedding2.T) / (np.linalg.norm(embedding1) * np.linalg.norm(embedding2))
         return similarity
 
-    def get_embedding(self, img):
-        # `extract_features` 함수를 호출하여 임베딩 벡터 추출
-        embedding = self.extract_features(img)
-        return embedding
-
     def compare_images(self, query_image, retrieved_images):
         query_embedding = self.extract_features(query_image)
         similarities = []
         for img_url in retrieved_images:
             img = download_image(img_url)
             if img:
-                retrieved_embedding = self.get_embedding(img)
+                retrieved_embedding = self.extract_features(img)
                 similarity = self.calculate_similarity(query_embedding, retrieved_embedding)
                 similarities.append((img_url, similarity))
         
