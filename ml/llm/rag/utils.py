@@ -13,7 +13,7 @@ def load_documents(directory_path):
 def google_image_search(query, api_key, cse_id, num_results=5):
     url = "https://www.googleapis.com/customsearch/v1"
     params = {
-        "q": query,
+        "q": query + "lesion",
         "cx": cse_id,
         "key": api_key,
         "searchType": "image",
@@ -51,22 +51,40 @@ def download_image(url):
         return None
 
 def preprocess_image(image, size=(224, 224)):
+    # Debugging: Print the initial shape
     if isinstance(image, np.ndarray):
-        image = (image).astype(np.uint8) if image.dtype == np.float64 else image.astype(np.uint8)
+        print(f"Initial image shape: {image.shape}, dtype: {image.dtype}")
+    
+    # Check if the input is a NumPy array
+    if isinstance(image, np.ndarray):
+        # Remove batch dimension if present
+        if len(image.shape) == 4 and image.shape[0] == 1:
+            image = image[0]
+        # Fix cases where height and width are swapped
+        if image.shape[0] == 1 and image.shape[1] == 1 and len(image.shape) == 4:
+            image = np.squeeze(image, axis=(0, 1))  # Remove redundant dimensions
+        # Ensure the array is uint8 and handle RGBA
+        if image.dtype != np.uint8:
+            image = (image * 255).astype(np.uint8)
         if image.shape[-1] == 4:
-            image = Image.fromarray(image[:, :, :3])
+            image = Image.fromarray(image[:, :, :3])  # Convert RGBA to RGB
         else:
             image = Image.fromarray(image)
+
     elif isinstance(image, bytes):
         image = Image.open(io.BytesIO(image))
-        print("바이너리")
     elif hasattr(image, 'file'):
         image = Image.open(io.BytesIO(image.file.read()))
-        print("file object")
     elif isinstance(image, str):
         image = Image.open(image)
-        print("string")
-        
+    
+    # Ensure the image is in RGB format
+    image = image.convert("RGB")
+    
+    # Resize the image to the target size
     image = image.resize(size)
-    image = np.array(image)
+    
+    # Convert back to NumPy array and normalize
+    image = np.array(image) / 255.0  # Normalize pixel values to [0, 1]
+    print(f"Final preprocessed image shape: {image.shape}")
     return image
