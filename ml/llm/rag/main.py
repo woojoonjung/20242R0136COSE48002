@@ -1,8 +1,6 @@
 import sys ,  os
+import numpy as np
 sys.path.append(os.path.abspath("/workspace"))
-
-# __main__.py로 실행하실때 이거 주석 푸시면 됩니다.
-# 이미지나 파일 패스 맞추셔야 할거에요!
 
 # from ml.llm.rag.retriever import Retriever
 # from ml.llm.rag.generator import Generator
@@ -44,34 +42,49 @@ def main(query,query_img):
     retriever = Retriever(symptom_texts)
     retriever.index_documents()
     print("!!!!!!!!!!!!!success retriever!!!!!!!!!!!")
-
     retrieved_docs = retriever.retrieve(query)
-    # print(retrieved_docs)
     retrieved_imgs = []
     pairs = []
 
     for disease in retrieved_docs:
-        google_query = disease[0]
+        google_query = disease[0].split("(")[1].strip(")")
         # api_key = os.getenv("API_KEY")
         # cse_id = os.getenv("CSE_ID")
-        retrieved_imgs += google_image_search(google_query, "AIzaSyDzcdrkz6K4F-zo6WSDD9muIE6kf5MmWRU", "2338e6025cd394266")
+        retrieved_imgs = google_image_search(google_query, "AIzaSyDzcdrkz6K4F-zo6WSDD9muIE6kf5MmWRU", "2338e6025cd394266")
         print("\n The disease is " + google_query + "\n")
-        print(retrieved_imgs)
-        pairs += [(disease, img_url) for img_url in retrieved_imgs]
+        pairs += [(disease[0], img_url) for img_url in retrieved_imgs]
+
+    print("Retrieved images: \n")
+    for pair in pairs:
+        print(pair)
+        print("\n")
     print("start comparing image similarity ")
     results = image_sim.compare_images(query_img, retrieved_imgs)
     print(" comparing image similarity finished completely ")
-    # diagnosis = next(pair[0] for pair in pairs if pair[1] == results[0])
+    print(results)
+    diagnosis = next(pair[0] for pair in pairs if pair[1] == results[0][0])
+    print("--------------------------------------------------")
+    print("The diagnosis is " + diagnosis)
+    print("\n")
 
-    # context = find_entity_by_name(documents, diagnosis)
-    # context = str(context)
+    context = find_entity_by_name(documents, diagnosis)
+    context = str(context)
+    print ("Context: " + context)
 
-    # # Generate response based on retrieved documents
-    # response = generator.generate_response(context, query)
-    # return response
+    # Generate response based on retrieved documents
+    response = generator.generate_response(diagnosis)
+    print("--------------------------------------------------")
+    print("/* Response */")
+    print(response)
+    return response
 
 if __name__ == "__main__":
-    query = '피부에 작은 붉은 반점이 생기고 각질이 일어나요.'
-    query_img = load_image("/home/work/woojun/Capston/20242R0136COSE48002/ml/llm/data/test.jpg")
-    query_img = preprocess_image(query_img, size=(224,224))
+
+    query = '갑자기 허벅지에 이런게 생겼는데 표면이 딱딱하고 까칠까칠해요.'
+
+    query_img = load_image("/home/work/woojun/Capston/20242R0136COSE48002/ml/llm/data/skincancer.jpg")
+    print(f"Loaded image shape: {query_img.shape}")
+    query_img = preprocess_image(query_img, size=(224, 224))
+    print(f"Preprocessed query image shape: {query_img.shape}")
+
     main(query, query_img)
