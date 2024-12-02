@@ -50,7 +50,7 @@ def main(query,query_img):
         google_query = disease[0].split("(")[1].strip(")")
         # api_key = os.getenv("API_KEY")
         # cse_id = os.getenv("CSE_ID")
-        retrieved_imgs = google_image_search(google_query, "AIzaSyDzcdrkz6K4F-zo6WSDD9muIE6kf5MmWRU", "2338e6025cd394266")
+        retrieved_imgs = google_image_search(google_query, "~", "~")
         print("\n The disease is " + google_query + "\n")
         pairs += [(disease[0], img_url) for img_url in retrieved_imgs]
 
