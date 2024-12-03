@@ -68,6 +68,14 @@ def make_candidates(query, image):
         }
     ]
 
+    response = openai.Completion.create(
+        model="gpt-4o",
+        messages=messages
+    )
+    
+    return response['choices'][0]['message']['content']
+
+
 # Retrieve context
 def retrieve_context(candidates):
     asan_loc = "/home/work/woojun/Capston/20242R0136COSE48002/ml/llm/data/disease_details.json"
@@ -83,6 +91,7 @@ def retrieve_context(candidates):
             else:
                 context[entry['name']] = "No details found"
     return context
+
 
 # Generate questions for eliminating candidates
 def generate_question(retrieved_context):
@@ -108,7 +117,7 @@ def generate_question(retrieved_context):
         }
     ]
     
-    response = openai.ChatCompletion.create(
+    response = openai.Completion.create(
         model="gpt-4o",
         messages=messages
     )
@@ -118,3 +127,4 @@ def generate_question(retrieved_context):
 # Eliminate Disease
 def eliminate_disease(context, conversation, selection):
     question = conversation[-1]
+    ## TBD

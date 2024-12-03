@@ -40,20 +40,14 @@ def google_image_search(query, api_key, cse_id, num_results=5):
         print("Error:", response.status_code, response.text)
         return []
 
-def google_lens(image_path, api_key):
+def google_lens(image, api_key):
     """
     Uses the Google Vision API to perform Web Detection with manual API key authentication.
-    
-    Args:
-        image_path (str): Path to the image file.
-        api_key (str): Your Google Vision API key.
-    
     Returns:
         tuple: The first web entity's description and score, or None if no entities found.
     """
     # Read the image file and encode it in base64
-    with open(image_path, "rb") as image_file:
-        image_content = base64.b64encode(image_file.read()).decode("utf-8")
+    image_content = base64.b64encode(image.file.read()).decode("utf-8")
     
     # Google Vision API endpoint
     url = f"https://vision.googleapis.com/v1/images:annotate?key={api_key}"
