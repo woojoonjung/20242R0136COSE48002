@@ -1,0 +1,72 @@
+.chat-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 40px; /* Add more padding for input */
+    background-color: #fcfcfc; /* Match the app's clean aesthetic */
+}
+
+.textarea-container {
+    position: relative;
+    height: 28px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #f8f8f8;
+    border-radius: 12px;
+    padding: 10px; /* Adjust padding */
+}
+
+.chat-textarea:focus {
+    border-color: #f0f0f0; /* Highlight border when focused */
+    box-shadow: 0 0 5px rgba(50, 50, 50, 0.5); /* glow */
+}
+
+.chat-textarea {
+    width: 85%; /* Occupies most of the horizontal space */
+    height: 28px; /* Comfortable height for typing */
+    font-size: 16px;
+    border: 1px solid #ffffff; /* Light border */
+    border-radius: 12px; /* Rounded corners */
+    outline: none; /* Remove focus outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.camera-button {
+    cursor: pointer;
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+.camera-button:hover {
+    color: #ffffff; /* Darker green on hover */
+}
+
+.camera-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.submit-button {
+    background-color: #ffffff;
+    color: #ffffff;
+    width: 26px;
+    height: 26px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #ffffff;
+}
+
+.submit-button img {
+    width: 24px;
+    height: 24px;
+}
+
+.hidden-file-input {
+    display: none; /* Hides the file input */
+}

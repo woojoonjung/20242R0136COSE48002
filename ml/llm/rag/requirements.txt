@@ -1,9 +1,0 @@
-faiss-gpu
-transformers
-torch
-tensorflow==2.11.0
-keras==2.11.0
-tf-keras
-transformers[torch]
-tokenizers==0.13.3
-huggingface_hub>=0.10.0

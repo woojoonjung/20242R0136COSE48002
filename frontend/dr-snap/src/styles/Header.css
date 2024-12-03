@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* Height of the header */
+    background-color: #fcfcfc; /* White background for the header */
+  }
+  
+.header-logo {
+    max-width: 100px; /* Adjust logo size */
+    height: auto;
+    display: inline-block; /* Ensure it's centered with text-align */
+}
+  
