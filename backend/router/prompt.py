@@ -41,6 +41,18 @@ async def process(
 
     return {"response": response, "context": session["context"]}
 
+################
+# For testing ml
+@router.post("/test")
+async def testing(
+    symptoms: str = Form(...),
+    image: UploadFile = File(None)
+):
+    response = make_candidates(symptoms, image)
+
+    return {"response": response}
+################
+
 @router.post("/click")
 async def handle_user_response(data: UserResponseData):
     # Get session
@@ -55,17 +67,20 @@ async def handle_user_response(data: UserResponseData):
     diseases = list(context.keys())
 
     if len(diseases) <= 1:
-        return {"message": f"Diagnosis complete: {diseases[0]}"}
+        diagnosis = diagnose(session["context"])
+        return {"response": diagnosis}
+
     session["context"] = eliminate_disease(session["context"], session["conversation"], data.selected_element)
 
     # Check if only one disease remains
     if len(session["context"]) == 1:
         final_disease = list(session["context"].keys())[0]
-        return {"message": f"Diagnosis complete: {final_disease}"}
+        diagnosis = diagnose(session["context"])
+        return {"response": diagnosis}
 
     # Return the updated context
     return {
-        "message": "Disease eliminated. Generating next question...",
+        "response": "Disease eliminated. Generating next question...",
         "updated_context": session["context"]
     }
 
