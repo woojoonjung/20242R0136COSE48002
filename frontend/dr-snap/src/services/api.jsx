@@ -8,14 +8,26 @@ export const sendChatbotQuery = async (text, image) => {
     if (image) formData.append("image", image);
   
     try {
-      const response = await axios.post(`${API_URL}/prompt`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response.data;
+        const response = await axios.post(`${API_URL}/initial`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        return response.data;
     } catch (error) {
-      console.error("Error sending chatbot query:", error);
-      throw error;
+        console.error("Error sending chatbot query:", error);
+        throw error;
     }
   };
+
+export const sendMedicalExamResponse = async (choice) => {
+    try {
+        const response = await axios.post(`${API_URL}/click`, {
+            selected_element: choice,
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error sending medical exam response:", error);
+        throw error;
+    }
+};

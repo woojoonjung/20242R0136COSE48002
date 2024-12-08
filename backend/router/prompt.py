@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath("/home/work/woojun/Capston/20242R0136COSE48002")
 from typing import Dict, List, Optional
 from fastapi import APIRouter, File, UploadFile, Form, FastAPI
 from pydantic import BaseModel
-from ml.llm.rag.conversation import make_candidates, retrieve_context, generate_question
+from ml.llm.rag.conversation import make_candidates, retrieve_context, generate_question, diagnose, eliminate_disease
 
 # Single global session variable
 session = {"conversation": [], "context": None}
@@ -21,37 +21,27 @@ class UserResponseData(BaseModel):
 # Initialize the router
 router = APIRouter()
 
-@router.post("/prompt")
+
+@router.post("/initial")
 async def process(
     symptoms: str = Form(...),
     image: UploadFile = File(None)
 ):
     # Get session
     global session
+    
+    session["conversation"] = []
+    session["conversation"].append(symptoms)
 
-    # Initial conversation
-    if len(session["conversation"]) < 1:
-        session["conversation"].append(symptoms)
-        candidates = make_candidates(symptoms, image)
-        session["context"] = retrieve_context(candidates)
+    candidates = make_candidates(symptoms, image)
+    session["context"] = retrieve_context(candidates)
 
-    # Generate the next question based on the current context
-    response = generate_question(session["context"])
-    session["conversation"].append(response)
+    # Generate the first question based on the retrieved context
+    first_question = generate_question(session["context"])
+    session["conversation"].append(first_question)
 
-    return {"response": response, "context": session["context"]}
+    return {"response": first_question, "context": session["context"]}
 
-################
-# For testing ml
-@router.post("/test")
-async def testing(
-    symptoms: str = Form(...),
-    image: UploadFile = File(None)
-):
-    response = make_candidates(symptoms, image)
-
-    return {"response": response}
-################
 
 @router.post("/click")
 async def handle_user_response(data: UserResponseData):
@@ -60,29 +50,44 @@ async def handle_user_response(data: UserResponseData):
 
     # Check if context exists
     if not session["context"]:
-        return {"error": "Context is not initialized. Please start with /prompt."}
+        return {"error": "Context is not initialized. Please start with /initial."}
 
     # Eliminate a disease based on the user response
     context = session["context"]
-    diseases = list(context.keys())
 
-    if len(diseases) <= 1:
-        diagnosis = diagnose(session["context"])
-        return {"response": diagnosis}
+    question = session["conversation"][-1]
+    user_response = f"{question} {data.selected_element}"
+    session["conversation"].append(user_response)
 
     session["context"] = eliminate_disease(session["context"], session["conversation"], data.selected_element)
 
-    # Check if only one disease remains
-    if len(session["context"]) == 1:
-        final_disease = list(session["context"].keys())[0]
+    # If only one disease remains, finalize the diagnosis
+    diseases = list(context.keys())
+    if len(diseases) <= 1:
         diagnosis = diagnose(session["context"])
-        return {"response": diagnosis}
+        session["conversation"].append(diagnosis)
+        return {
+            "response": diagnosis,
+            "diagnosis_finalized": True,
+        }
+
+    # Generate new question
+    else:
+        new_question = generate_question(session["context"])
+        session["conversation"].append(new_question)
+        return {
+            "response": new_question,
+            "updated_context": session["context"],
+            "diagnosis_finalized": False,
+        }
 
     # Return the updated context
     return {
-        "response": "Disease eliminated. Generating next question...",
-        "updated_context": session["context"]
+        "response": "Error",
+        "updated_context": session["context"],
+        "diagnosis_finalized": False,
     }
+
 
 # Initialize FastAPI app and include router
 app = FastAPI()

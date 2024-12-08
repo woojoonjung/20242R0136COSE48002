@@ -1,18 +1,8 @@
 import React from "react";
-import axios from "axios"; // Import axios to send data to the server
+import axios from "axios";
 import "../styles/ChatResponse.css";
 
 const ChatResponse = ({ response }) => {
-  const handleImageClick = async (imgUrl) => {
-    try {
-      const API_URL = "http://localhost:49529";
-      await axios.post(`${API_URL}/click`, { img_url: imgUrl });
-      alert(`Image clicked: ${imgUrl}`);
-    } catch (error) {
-      console.error("Error sending image click data:", error);
-    }
-  };
-
   return (
     <div className="chat-response">
       {!response.text && !response.img_urls.length ? (
