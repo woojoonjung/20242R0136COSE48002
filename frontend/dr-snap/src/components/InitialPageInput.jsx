@@ -19,9 +19,13 @@ const InitialPageInput = ({ onSubmit }) => {
   return (
     <form className="chat-input" onSubmit={handleSubmit}>
       <div className="textarea-container">
-        <label htmlFor="image-upload" className="camera-button">
-          <img src={camera} alt="Upload" />
-        </label>
+      <button
+        type="button"
+        className="camera-button"
+        onClick={() => document.getElementById('image-upload').click()}
+      >
+        <img src={camera} alt="Upload" />
+      </button>
         <input
           id="image-upload"
           type="file"

@@ -2,8 +2,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100px; /* Height of the header */
-    background-color: #fcfcfc; /* White background for the header */
+    height: 70px;
+    background-color: #f8f8f8; /* White background for the header */
+    margin-top: 20px;
   }
   
 .header-logo {

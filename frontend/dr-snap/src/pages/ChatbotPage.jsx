@@ -58,7 +58,7 @@ const ChatbotPage = () => {
   return (
     <div className="chatbot-page">
       <Header />
-      <ChatResponse response={response} />
+      <ChatResponse response={response} currentPage={currentPage}/>
       <ChatInput
         currentPage={currentPage}
         onSubmit={currentPage === "initial" ? handleQuerySubmit : handleMedicalExamSubmit}

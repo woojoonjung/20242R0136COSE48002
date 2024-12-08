@@ -3,72 +3,101 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 600px;
+    max-width: 860px;
     padding: 40px; /* Add more padding for input */
-    background-color: #fcfcfc; /* Match the app's clean aesthetic */
+    margin-bottom: 20px;
+    background-color: #f8f8f8; /* Match the app's clean aesthetic */
 }
 
 .textarea-container {
-    position: relative;
-    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: center;
+    height: 36px;
     width: 100%;
     background-color: #ffffff;
-    border: 1px solid #f8f8f8;
-    border-radius: 12px;
-    padding: 10px; /* Adjust padding */
-}
-
-.chat-textarea:focus {
-    border-color: #f0f0f0; /* Highlight border when focused */
-    box-shadow: 0 0 5px rgba(50, 50, 50, 0.5); /* glow */
-}
-
-.chat-textarea {
-    width: 85%; /* Occupies most of the horizontal space */
-    height: 28px; /* Comfortable height for typing */
-    font-size: 16px;
-    border: 1px solid #ffffff; /* Light border */
-    border-radius: 12px; /* Rounded corners */
-    outline: none; /* Remove focus outline */
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 10px 13px;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.camera-button {
-    cursor: pointer;
-    color: #ffffff;
-    transition: color 0.3s ease;
+.textarea-container:focus-within {
+    border-color: #f0f0f0; /* Highlight border when focused */
+    box-shadow: 0 0 6px rgba(140, 140, 140, 0.12); /* glow */
 }
 
-.camera-button:hover {
-    color: #ffffff; /* Darker green on hover */
+.chat-textarea {
+    justify-content: center;
+    align-items: center;
+    width: 90%; /* horizontal portion */
+    height: 30px; 
+    font-size: 18px;
+    line-height: 1.55;
+    letter-spacing: 0.5px;
+    word-spacing: -.35rem;
+    border: 1px solid #ffffff; /* Light border */
+    border-radius: 6px; /* Rounded corners */
+    outline: none; /* Remove focus outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    resize: none;
 }
 
-.camera-button img {
-    width: 24px;
-    height: 24px;
+.chat-textarea::-webkit-scrollbar {
+    display: none;
 }
 
-.submit-button {
-    background-color: #ffffff;
-    color: #ffffff;
-    width: 26px;
-    height: 26px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.chat-textarea:hover::-webkit-scrollbar {
+    display: block;
+    height: 4px;
 }
 
-.submit-button:hover {
-    background-color: #ffffff;
+.chat-textarea:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.1);
+    border-radius: 2px;
 }
 
-.submit-button img {
-    width: 24px;
-    height: 24px;
+.chat-textarea:hover::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .hidden-file-input {
-    display: none; /* Hides the file input */
+    display: none;
+}
+
+.camera-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.camera-button img,
+.submit-button img {
+    width: 24px;
+    height: 24px;
 }
 
 /* ChatInput.css */

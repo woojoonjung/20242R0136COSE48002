@@ -6,7 +6,7 @@
     width: 100%;
     max-width: 800px; /* Limit width for responsiveness */
     margin: 20px 0; 
-    background-color: #fcfcfc; /* Light blue background for the response area */
+    background-color: #f8f8f8; /* Light blue background for the response area */
   }
   
 .response-text {
@@ -16,13 +16,21 @@
     font-family: "Arial", sans-serif;
     padding: 10px;
 }
+
+.diagnosis-response {
+  font-size: 20px; /* Font size for response */
+  color: #242424; /* Neutral dark color for text */
+  text-align: center; /* Center-align text */
+  font-family: "Arial", sans-serif;
+  padding: 10px;
+}
   
 .default-text {
     font-size: 28px;
     color: #242424;
     text-align: center;
     font-family: "Arial", sans-serif;
-    padding: 10px;
+    padding: auto auto;
 }
 
 .image-container {

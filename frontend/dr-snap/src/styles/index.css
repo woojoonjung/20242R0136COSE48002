@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #f8f8f8;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,7 +25,7 @@ a:hover {
 body {
   margin: 0;
   font-family: 'Courier New', Courier, monospace;
-  background-color: #fcfcfc;
+  background-color: #f8f8f8;
 }
 
 h1 {
@@ -59,7 +59,6 @@ button:focus-visible {
   justify-content: space-between; /* Create space between header and footer */
   align-items: center; /* Center horizontally */
   min-height: 100vh; /* Full viewport height */
-  padding: 20px; /* Add some padding */
   box-sizing: border-box; /* Include padding in width/height */
 }
 
