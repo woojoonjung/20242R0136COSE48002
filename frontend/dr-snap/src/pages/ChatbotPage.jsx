@@ -11,7 +11,7 @@ const ChatbotPage = () => {
 
   const handleQuerySubmit = async (text, image) => {
     try {
-      setResponse({ text: "흠..."});
+      setResponse({ text: "..."});
       const backendResponse = await sendChatbotQuery(text, image);
       setResponse({
         text: backendResponse.response || "No response received.",

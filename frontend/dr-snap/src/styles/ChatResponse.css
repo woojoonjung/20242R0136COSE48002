@@ -18,10 +18,12 @@
 }
 
 .diagnosis-response {
-  font-size: 20px; /* Font size for response */
-  color: #242424; /* Neutral dark color for text */
-  text-align: center; /* Center-align text */
+  font-size: 20px;
+  color: #242424; 
+  text-align: center;
   font-family: "Arial", sans-serif;
+  word-break: keep-all;
+  line-height: 1.75;
   padding: 10px;
 }
   

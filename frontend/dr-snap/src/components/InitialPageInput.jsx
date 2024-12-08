@@ -19,13 +19,13 @@ const InitialPageInput = ({ onSubmit }) => {
   return (
     <form className="chat-input" onSubmit={handleSubmit}>
       <div className="textarea-container">
-      <button
-        type="button"
-        className="camera-button"
-        onClick={() => document.getElementById('image-upload').click()}
-      >
-        <img src={camera} alt="Upload" />
-      </button>
+        <button
+          type="button"
+          className="transparent-button"
+          onClick={() => document.getElementById('image-upload').click()}
+        >
+          <img src={camera} alt="Upload" />
+        </button>
         <input
           id="image-upload"
           type="file"
@@ -39,7 +39,7 @@ const InitialPageInput = ({ onSubmit }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <button type="submit" className="submit-button">
+        <button type="submit" className="transparent-button">
           <img src={enter} alt="Upload" />
         </button>
       </div>
