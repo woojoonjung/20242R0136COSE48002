@@ -25,6 +25,7 @@ export const sendMedicalExamResponse = async (choice) => {
         const response = await axios.post(`${API_URL}/click`, {
             selected_element: choice,
         });
+        console.log(response.data)
         return response.data;
     } catch (error) {
         console.error("Error sending medical exam response:", error);

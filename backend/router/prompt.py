@@ -15,7 +15,6 @@ class Prompt(BaseModel):
     symptoms: str = ""
 
 class UserResponseData(BaseModel):
-    session_id: str
     selected_element: str  # "O" or "X"
 
 # Initialize the router
@@ -39,6 +38,7 @@ async def process(
     # Generate the first question based on the retrieved context
     first_question = generate_question(session["context"])
     session["conversation"].append(first_question)
+    print(session)
 
     return {"response": first_question, "context": session["context"]}
 
@@ -53,21 +53,30 @@ async def handle_user_response(data: UserResponseData):
         return {"error": "Context is not initialized. Please start with /initial."}
 
     # Eliminate a disease based on the user response
-    context = session["context"]
-
-    question = session["conversation"][-1]
-    user_response = f"{question} {data.selected_element}"
+    user_response = f"{data.selected_element}"
     session["conversation"].append(user_response)
 
-    session["context"] = eliminate_disease(session["context"], session["conversation"], data.selected_element)
+    eliminated_disease = eliminate_disease(session["context"], session["conversation"])
+    
+    # eliminated_disease = None
+    # for key in session["context"].keys():
+    #     if key.endswith(f"({eliminated_disease_eng})"):
+    #         eliminated_disease = key
+    #         print(eliminated_disease)
+    #         break
 
+    if eliminated_disease:
+        del session["context"][eliminated_disease]
+        
     # If only one disease remains, finalize the diagnosis
-    diseases = list(context.keys())
+    diseases = list(session["context"].keys())
     if len(diseases) <= 1:
         diagnosis = diagnose(session["context"])
         session["conversation"].append(diagnosis)
+        print(session)
         return {
             "response": diagnosis,
+            "updated_context": session["context"],
             "diagnosis_finalized": True,
         }
 
@@ -75,6 +84,7 @@ async def handle_user_response(data: UserResponseData):
     else:
         new_question = generate_question(session["context"])
         session["conversation"].append(new_question)
+        print(session)
         return {
             "response": new_question,
             "updated_context": session["context"],

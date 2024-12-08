@@ -76,25 +76,35 @@
     display: flex;
     justify-content: space-around;
     padding: 10px;
-  }
-  
-  .medical-exam-input .o-button,
-  .medical-exam-input .x-button {
-    font-size: 18px;
+}
+
+.medical-exam-input .o-button,
+.medical-exam-input .x-button {
+    background: #242424;
     padding: 10px 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-  }
-  
-  .diagnosis-page-input {
+}
+
+.medical-exam-input .o-button:hover,
+.medical-exam-input .x-button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.medical-exam-input img{
+    width: 24px;
+    height: 24px;
+}
+
+.diagnosis-page-input {
     display: flex;
     justify-content: space-between;
     padding: 10px;
-  }
-  
-  .diagnosis-page-input .continue-button,
-  .diagnosis-page-input .save-button {
+}
+
+.diagnosis-page-input .continue-button,
+.diagnosis-page-input .save-button {
     font-size: 16px;
     padding: 10px 20px;
     border: 1px solid #007bff;
@@ -102,5 +112,5 @@
     color: #fff;
     border-radius: 5px;
     cursor: pointer;
-  }
+}
   

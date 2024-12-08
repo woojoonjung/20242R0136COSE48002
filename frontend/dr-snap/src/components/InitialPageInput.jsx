@@ -3,7 +3,7 @@ import "../styles/ChatInput.css";
 import camera from "../assets/icons/camera.png";
 import enter from "../assets/icons/enter.png";
 
-const ChatInput = ({ onSubmit }) => {
+const InitialPageInput = ({ onSubmit }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
 
@@ -17,7 +17,7 @@ const ChatInput = ({ onSubmit }) => {
   };
 
   return (
-    <form className="initial-page-input" onSubmit={handleSubmit}>
+    <form className="chat-input" onSubmit={handleSubmit}>
       <div className="textarea-container">
         <label htmlFor="image-upload" className="camera-button">
           <img src={camera} alt="Upload" />

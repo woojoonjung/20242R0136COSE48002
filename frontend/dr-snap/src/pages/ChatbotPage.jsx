@@ -30,12 +30,12 @@ const ChatbotPage = () => {
       const backendResponse = await sendMedicalExamResponse(choice)
   
       // Check if diagnosis is finalized
-      if (backendResponse.data.diagnosis_finalized) {
-        setResponse({ text: backendResponse.data.response });
+      if (backendResponse.diagnosis_finalized) {
+        setResponse({ text: backendResponse.response });
         setCurrentPage("diagnosis"); // Transition to diagnosis page
       } else {
         setResponse({
-          text: backendResponse.data.response,
+          text: backendResponse.response,
         });
       }
     } catch (error) {
