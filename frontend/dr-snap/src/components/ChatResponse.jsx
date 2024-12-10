@@ -1,21 +1,45 @@
 import React from "react";
-import axios from "axios";
 import "../styles/ChatResponse.css";
 
-const ChatResponse = ({ response, currentPage }) => {
+const ChatResponse = ({ messages, currentPage }) => {
+  if (currentPage === "faq") {
+    return (
+      <div className="chat-response chat-interface">
+        {messages.length === 0 ? (
+          <p className="default-text">더 궁금하신게 있나요?</p>
+        ) : (
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`chat-message ${msg.type === "user" ? "user-message" : "bot-message"}`}
+            >
+              {msg.text}
+            </div>
+          ))
+        )}
+      </div>
+    );
+  }
+
+  // Single-response logic for other pages
+  const latestMessage = messages.length > 0 ? messages[messages.length - 1].text : "";
+
   return (
     <div className="chat-response">
-      {!response.text ? (
-        <p className="default-text"> 어디가 불편하신가요? </p>
+      {!latestMessage ? (
+        <p className="default-text">어디가 불편하신가요?</p>
       ) : (
         <>
-          {response.text && (
-            <p
-              className={`response-text ${
-                currentPage === "diagnosis" ? "diagnosis-response" : ""
-              }`}
-            >
-              {response.text}
+          <p
+            className={`response-text ${
+              currentPage === "diagnosis" ? "diagnosis-response" : ""
+            }`}
+          >
+            {latestMessage}
+          </p>
+          {currentPage === "diagnosis" && (
+            <p className="additional-response">
+              진단 결과를 자세히 확인하세요. 추가 정보는 질문 이어가기를 통해 확인할 수 있습니다.
             </p>
           )}
         </>

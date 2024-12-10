@@ -87,6 +87,7 @@
     height: 36px;
     background: rgba(0, 0, 0, 0);;
     border: none;
+    outline: none;
     cursor: pointer;
     padding: 0px;
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -116,6 +117,7 @@
 .medical-exam-input .x-button {
     background: rgba(0, 0, 0, 0);
     border: none;
+    outline: none;
     cursor: pointer;
 }
 

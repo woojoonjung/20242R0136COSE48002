@@ -1,4 +1,5 @@
 import sys, os
+import base64
 from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
@@ -128,7 +129,7 @@ def eliminate_disease(context, conversation):
     messages = [
         {
             "role": "system", 
-            "content": "당신은 피부과 전문의입니다. 답변은 부연 설명 없이 질병의 이름만 있어야 합니다."
+            "content": "당신은 피부과 전문의입니다. 답변은 부연 설명 없이 질병의 영문 이름만 있어야 합니다."
         },
         {
             "role": "assistant",
@@ -157,25 +158,26 @@ def diagnose(context):
     messages = [
         {
             "role": "system", 
-            "content": "당신은 피부과 전문의입니다. 친근하고 캐주얼하게 환자와의 진료를 진행해주세요. 답변 중 이야기의 내용(e.g. 설명, 행동지침, 격려)이 바뀌면 줄 바꿈(\n)을 해주세요."
+            "content": """당신은 피부과 전문의입니다. 
+            친근하고 캐주얼하게 환자와의 진료를 진행해주세요. 
+            답변 중 이야기의 내용(e.g. 설명, 행동지침, 격려)이 바뀌면 Enter를 통해 줄 바꿈을 해주세요.
+            항목화(itemization, e.g.: **피부관리**) 없이 답변을 작성해주세요.
+            """
         },
         {
             "role": "assistant",
             "content": """
-            악성 흑색종은 멜라닌 세포에서 발생하는 피부암으로, 피부뿐만 아니라 점막, 눈 등 다양한 부위에 생길 수 있는데요. 
-            초기에는 작은 점이나 변색으로 보일 수 있으나 빠르게 진행하면 생명을 위협할 수 있습니다. 주요 증상으로는 
-            비대칭적인 점, 경계가 불규칙한 점,  다양한 색조를 가진 점, 점의 크기 변화 등이 있어요. 
+            악성 흑색종은 멜라닌 세포에서 발생하는 피부암으로, 피부뿐만 아니라 점막, 눈 등 다양한 부위에 생길 수 있는데요.
+            초기에는 작은 점이나 변색으로 보일 수 있으나 빠르게 진행하면 생명을 위협할 수 있습니다. 주요 증상으로는
+            비대칭적인 점, 경계가 불규칙한 점,  다양한 색조를 가진 점, 점의 크기 변화 등이 있어요.
             햇빛 노출이 주요 위험 요인이므로 자외선 차단제를 사용하고 직사광선을 피하는 것이 좋아요.
 
-            가능한 빨리 병원을 방문하여 점의 변화를 의사와 상담하고 필요한 경우 조직 검사를 받으세요. 
-            진단 결과에 따라 수술, 방사선 치료, 항암 요법 등 적합한 치료법이 결정됩니다. 치료 후에도 정기적으로 
-            검진을 받아 재발 여부를 확인하고, 의사의 권고를 철저히 따르세요. 기존 점이나 새로운 점의 변화를 지속적으로 관찰하며, 
-            필요 시 빠르게 의료진과 상의하세요. 
+            가능한 빨리 병원을 방문하여 점의 변화를 의사와 상담하고 필요한 경우 조직 검사를 받으세요.
+            진단 결과에 따라 수술, 방사선 치료, 항암 요법 등 적합한 치료법이 결정됩니다. 치료 후에도 정기적으로
+            검진을 받아 재발 여부를 확인하고, 의사의 권고를 철저히 따르세요. 기존 점이나 새로운 점의 변화를 지속적으로 관찰하며,
+            필요 시 빠르게 의료진과 상의하세요.
 
-            또한, 건강한 식단과 충분한 휴식을 통해 면역력을 유지하여 치료 효과를 극대화하세요. 
             악성 흑색종은 조기 발견 시 예후가 좋으니, 너무 걱정하지는 마시고 작은 변화라도 놓치지 않는 것이 중요해요 :)
-
-            더 궁금한게 있으신가요?
             """
         },
         {
@@ -187,6 +189,56 @@ def diagnose(context):
             """
         }
     ]
+    
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages
+    )
+    print(response.choices[0].message.content)
+
+    return response.choices[0].message.content
+
+
+# Further FAQ
+def faq(query, context, conversation, image):
+
+    messages = [
+        {
+            "role": "system", 
+            "content": """당신은 피부과 전문의입니다. 
+            친근하고 캐주얼하게 환자와의 진료를 진행해주세요.
+            """
+        }
+    ]
+
+    task = f"""
+        환자 질병에 대한 정보: {context},
+        환자와의 대화: {conversation}
+        위의 정보를 참고하셔도 좋습니다.
+        다음에 대해 답변해주세요.
+        {query}
+        """
+
+    if image:
+        try:
+            image_content = image.read()
+            image_base64 = base64.b64encode(image_content).decode("utf-8")
+            image_type = image.content_type
+
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": task},
+                    {"type": "image_url", "image_url": f"data:{image_type};base64,{image_base64}"}
+                ]
+            })
+        except Exception as e:
+            return {"error": f"Error processing the image: {e}"}
+    else:
+        messages.append({
+            "role": "user",
+            "content": task
+        })
     
     response = client.chat.completions.create(
         model="gpt-4o",

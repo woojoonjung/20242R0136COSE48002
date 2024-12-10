@@ -50,3 +50,30 @@
     height: auto;
     border-radius: 16px; /* Rounded corners */
 }
+
+/**/
+.chat-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 70%;
+}
+
+.user-message {
+  text-align: right;
+  background-color: #e6f7ff;
+  margin-left: auto;
+}
+
+.bot-message {
+  text-align: left;
+  background-color: #f5f5f5;
+  margin-right: auto;
+}

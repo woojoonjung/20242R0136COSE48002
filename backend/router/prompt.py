@@ -56,18 +56,21 @@ async def handle_user_response(data: UserResponseData):
     user_response = f"{data.selected_element}"
     session["conversation"].append(user_response)
 
-    eliminated_disease = eliminate_disease(session["context"], session["conversation"])
+    eliminated_disease_eng = eliminate_disease(session["context"], session["conversation"])
     
-    # eliminated_disease = None
-    # for key in session["context"].keys():
-    #     if key.endswith(f"({eliminated_disease_eng})"):
-    #         eliminated_disease = key
-    #         print(eliminated_disease)
-    #         break
-
-    if eliminated_disease:
+    eliminated_disease = None
+    for key in session["context"].keys():
+        if key.endswith(f"({eliminated_disease_eng})"):
+            eliminated_disease = key
+            print(eliminated_disease)
+            break
+    
+    print("Current context:", session["context"])
+    print("Key to delete:", eliminated_disease_eng)
+    # print(session["context"])
+    if eliminated_disease in session["context"]:
         del session["context"][eliminated_disease]
-        
+
     # If only one disease remains, finalize the diagnosis
     diseases = list(session["context"].keys())
     if len(diseases) <= 1:
@@ -96,6 +99,26 @@ async def handle_user_response(data: UserResponseData):
         "response": "Error",
         "updated_context": session["context"],
         "diagnosis_finalized": False,
+    }
+
+@router.post("/faq")
+async def handle_faq(
+    symptoms: str = Form(...),
+    image: Optional[UploadFile] = File(None)
+):
+    # Get session
+    global session
+    session["conversation"].append(symptoms)
+
+    faq_response = faq(query, session["context"], session["conversation"], image)
+
+    session["conversation"].append(f"User: {query}")
+    session["conversation"].append(f"Bot: {faq_response}")
+
+    return {
+        "response": faq_response,
+        "updated_context": session["context"],
+        "conversation": session["conversation"],
     }
 
 

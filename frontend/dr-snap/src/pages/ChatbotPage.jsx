@@ -6,41 +6,53 @@ import "../styles/index.css";
 import { sendChatbotQuery, sendMedicalExamResponse } from "../services/api";
 
 const ChatbotPage = () => {
-  const [response, setResponse] = useState({ text: "" });
-  const [currentPage, setCurrentPage] = useState("initial"); // Manage current page state, set "initial" initially
+  const [messages, setMessages] = useState([]);
+  const [currentPage, setCurrentPage] = useState("initial");
 
   const handleQuerySubmit = async (text, image) => {
+    setMessages([{ type: "bot", text: "예상되는 병이 몇 가지 있는데요 더 확실한 진단을 위해 몇 가지 질문드리겠습니다" }]);
+
     try {
-      setResponse({ text: "..."});
+      const userMessage = { type: "user", text: text };
+      setMessages((prev) => [...prev, userMessage]);
+
       const backendResponse = await sendChatbotQuery(text, image);
-      setResponse({
+      const botMessage = {
+        type: "bot",
         text: backendResponse.response || "No response received.",
-      });
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
       setCurrentPage("medicalExamination");
     } catch (error) {
       console.error("Error communicating with the server:", error);
-      setResponse({
-        text: "Error: Unable to process your request."
-      });
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", text: "Error: Unable to process your request." },
+      ]);
     }
   };
 
   const handleMedicalExamSubmit = async (choice) => {
+    setMessages((prev) => [...prev, { type: "user", text: choice }]);
+
     try {
-      const backendResponse = await sendMedicalExamResponse(choice)
-  
-      // Check if diagnosis is finalized
+      const backendResponse = await sendMedicalExamResponse(choice);
       if (backendResponse.diagnosis_finalized) {
-        setResponse({ text: backendResponse.response });
-        setCurrentPage("diagnosis"); // Transition to diagnosis page
+        setMessages([{ type: "bot", text: backendResponse.response }]);
+        setCurrentPage("diagnosis");
       } else {
-        setResponse({
-          text: backendResponse.response,
-        });
+        setMessages((prev) => [
+          ...prev,
+          { type: "bot", text: backendResponse.response },
+        ]);
       }
     } catch (error) {
       console.error("Error handling medical exam response:", error);
-      setResponse({ text: "Error processing your response." });
+      setMessages((prev) => [
+        ...prev,
+        { type: "bot", text: "Error processing your response." },
+      ]);
     }
   };
 
@@ -55,13 +67,33 @@ const ChatbotPage = () => {
     alert("진료가 저장되었습니다!");
   };
 
+  const handleFAQSubmit = (text, image) => {
+    const userMessage = { type: "user", text: text };
+    setMessages((prev) => [...prev, userMessage]);
+
+    const backendResponse = sendFaqQuery(text, image);
+    const botMessage = {
+      type: "bot",
+      text: backendResponse.response || "No response received.",
+    };
+    setMessages((prev) => [...prev, botMessage]);
+  };
+
   return (
     <div className="chatbot-page">
       <Header />
-      <ChatResponse response={response} currentPage={currentPage}/>
+      <ChatResponse messages={messages} currentPage={currentPage} />
       <ChatInput
         currentPage={currentPage}
-        onSubmit={currentPage === "initial" ? handleQuerySubmit : handleMedicalExamSubmit}
+        onSubmit={
+          currentPage === "initial"
+            ? handleQuerySubmit
+            : currentPage === "medicalExamination"
+            ? handleMedicalExamSubmit
+            : currentPage === "faq"
+            ? handleFAQSubmit
+            : null
+        }
         onNavigate={handleNavigate}
         onSave={handleSave}
       />
