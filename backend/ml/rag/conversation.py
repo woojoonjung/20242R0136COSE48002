@@ -3,20 +3,20 @@ import base64
 from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
-sys.path.append(os.path.abspath("/home/work/woojun/Capston/20242R0136COSE48002"))
 from ml.rag.retriever import Retriever
 from ml.rag.utils import (
     load_documents, 
     google_lens, 
 )
-
+sys.path.append(os.path.abspath("/home/work/woojun/Capston/20242R0136COSE48002"))
 load_dotenv()
 client = OpenAI()
 google_api_key = os.getenv('GOOGLE_API_KEY')
 
+
 # Generate candidates from user input
 def make_candidates(query, image):
-    asan_loc = "/home/work/woojun/Capston/20242R0136COSE48002/ml/llm/data/disease_details.json"
+    asan_loc = "/home/work/woojun/Capston/20242R0136COSE48002/backend/ml/data/disease_details.json"
     documents = load_documents(asan_loc)
 
     symptom_texts = []
@@ -81,7 +81,7 @@ def make_candidates(query, image):
 
 # Retrieve context for candidates
 def retrieve_context(candidates):
-    asan_loc = "/home/work/woojun/Capston/20242R0136COSE48002/ml/llm/data/disease_details.json"
+    asan_loc = "/home/work/woojun/Capston/20242R0136COSE48002/backend/ml/data/disease_details.json"
     documents = load_documents(asan_loc)
     candidates = [line.strip() for line in candidates.strip().split("\n")]
     print(candidates)

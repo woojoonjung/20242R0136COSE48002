@@ -9,6 +9,10 @@ const InitialPageInput = ({ onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!image) {
+      alert("사진을 첨부해주세요");
+      return;
+    }
     if (text || image) {
       onSubmit(text, image);
       setText(""); 

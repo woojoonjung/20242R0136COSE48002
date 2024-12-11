@@ -1,10 +1,15 @@
 import os
 import sys
-sys.path.append(os.path.abspath("/home/work/woojun/Capston/20242R0136COSE48002"))
 from typing import Dict, List, Optional
 from fastapi import APIRouter, File, UploadFile, Form, FastAPI
 from pydantic import BaseModel
-from ml.rag.conversation import make_candidates, retrieve_context, generate_question, diagnose, eliminate_disease
+from ml.rag.conversation import (
+    make_candidates, 
+    retrieve_context, 
+    generate_question, 
+    diagnose, 
+    eliminate_disease
+)
 
 # Single global session variable
 session = {"conversation": [], "context": None}
