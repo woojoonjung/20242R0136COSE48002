@@ -4,12 +4,11 @@ from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
 sys.path.append(os.path.abspath("/home/work/woojun/Capston/20242R0136COSE48002"))
-from ml.llm.rag.retriever import Retriever
-from ml.llm.rag.utils import (
+from ml.rag.retriever import Retriever
+from ml.rag.utils import (
     load_documents, 
     google_lens, 
 )
-from ml.llm.rag.image_similarity import ImageSimilarity
 
 load_dotenv()
 client = OpenAI()
