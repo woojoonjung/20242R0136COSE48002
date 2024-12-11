@@ -1,0 +1,79 @@
+.chat-response {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px; /* Height of the response box */
+    width: 100%;
+    max-width: 800px; /* Limit width for responsiveness */
+    margin: 20px 0; 
+    background-color: #f8f8f8; /* Light blue background for the response area */
+  }
+  
+.response-text {
+    font-size: 28px; /* Font size for response */
+    color: #242424; /* Neutral dark color for text */
+    text-align: center; /* Center-align text */
+    font-family: "Arial", sans-serif;
+    padding: 10px;
+}
+
+.diagnosis-response {
+  font-size: 20px;
+  color: #242424; 
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  word-break: keep-all;
+  line-height: 1.75;
+  padding: 10px;
+}
+  
+.default-text {
+    font-size: 28px;
+    color: #242424;
+    text-align: center;
+    font-family: "Arial", sans-serif;
+    padding: auto auto;
+}
+
+.image-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow images to wrap */
+    flex-direction: row;
+    justify-content: center;
+    gap: 15px; /* Space between images */
+    margin-top: 20px;
+  }
+  
+.response-image {
+    max-width: 200px; /* Limit image size */
+    max-height: 200px;
+    height: auto;
+    border-radius: 16px; /* Rounded corners */
+}
+
+/**/
+.chat-interface {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  padding: 10px;
+  border-radius: 4px;
+  max-width: 70%;
+}
+
+.user-message {
+  text-align: right;
+  background-color: #e6f7ff;
+  margin-left: auto;
+}
+
+.bot-message {
+  text-align: left;
+  background-color: #f5f5f5;
+  margin-right: auto;
+}

@@ -1,14 +1,8 @@
-torch==1.13.1
 uvicorn
 fastapi
 pydantic
-faiss-gpu
-transformers
-sentence-transformers
-torch
-tensorflow
-transformers[torch]
-tokenizers
-peft
 python-dotenv
 python-multipart
+faiss-gpu
+transformers
+google-cloud-vision

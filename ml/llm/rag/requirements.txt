@@ -1,7 +1,0 @@
-faiss-gpu
-transformers
-sentence-transformers
-torch
-tensorflow
-transformers[torch]
-tokenizers==0.13.3

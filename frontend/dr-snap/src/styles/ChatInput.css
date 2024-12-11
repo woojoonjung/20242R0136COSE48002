@@ -1,0 +1,160 @@
+.chat-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 860px;
+    padding: 40px; /* Add more padding for input */
+    margin-bottom: 20px;
+    background-color: #f8f8f8; /* Match the app's clean aesthetic */
+}
+
+.textarea-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: center;
+    height: 36px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 2px solid #f4f4f4;
+    border-radius: 16px;
+    padding: 10px 13px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.textarea-container:focus-within {
+    border-color: #f0f0f0;
+    box-shadow: 0 0 7px rgba(150, 150, 150, 0.14); /* glow */
+}
+
+.chat-textarea {
+    justify-content: center;
+    align-items: center;
+    width: 90%; /* horizontal portion */
+    height: 30px; 
+    font-size: 18px;
+    line-height: 1.55;
+    letter-spacing: 0.5px;
+    word-spacing: -.35rem;
+    border: 1px solid #ffffff; /* Light border */
+    border-radius: 6px; /* Rounded corners */
+    outline: none; /* Remove focus outline */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    resize: none;
+}
+
+.chat-textarea::placeholder {
+  opacity: 1;
+  transition: opacity 0.01s ease;
+}
+
+.chat-textarea:focus::placeholder {
+  opacity: 0;
+}
+
+.chat-textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.chat-textarea:hover::-webkit-scrollbar {
+    display: block;
+    height: 4px;
+}
+
+.chat-textarea:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.1);
+    border-radius: 2px;
+}
+
+.chat-textarea:hover::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hidden-file-input {
+    display: none;
+}
+
+.transparent-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0);;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.transparent-button:hover {
+    background-color: rgba(0, 0, 0, 0.035); 
+    transform: scale(1.1);
+}
+
+.transparent-button img {
+    width: 24px;
+    height: 24px;
+}
+
+/* ChatInput.css */
+.medical-exam-input {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 280px;
+    padding: 10px;
+    margin-bottom: 60px;
+}
+
+.medical-exam-input .o-button,
+.medical-exam-input .x-button {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.medical-exam-input .o-button:hover,
+.medical-exam-input .x-button:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(1px 1px 2px rgba(150, 150, 150, 0.6));
+    transition: transform 0.24s ease-in-out;
+}
+
+.medical-exam-input img{
+    width: 42px;
+    height: 42px;
+}
+
+.diagnosis-page-input {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 46px;
+    width: 100%;
+    max-width: 280px;
+}
+
+.diagnosis-page-input .continue-button,
+.diagnosis-page-input .save-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    color: rgba(150, 150, 150, 50);
+    cursor: pointer;
+}
+  
+.diagnosis-page-input .continue-button:hover,
+.diagnosis-page-input .save-button:hover {
+    filter: drop-shadow(1px 1px 2px rgba(160, 160, 160, 0.5));
+    color: rgba(36, 36, 36, 70);
+    transition: transform 0.4s ease-in-out;
+}

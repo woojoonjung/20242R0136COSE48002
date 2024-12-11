@@ -1,0 +1,15 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    background-color: #f8f8f8; /* White background for the header */
+    margin-top: 20px;
+  }
+  
+.header-logo {
+    max-width: 100px; /* Adjust logo size */
+    height: auto;
+    display: inline-block; /* Ensure it's centered with text-align */
+}
+  
