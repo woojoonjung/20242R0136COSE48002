@@ -3,9 +3,21 @@ import "../styles/ChatInput.css";
 import camera from "../assets/icons/camera.png";
 import enter from "../assets/icons/enter.png";
 
-const InitialPageInput = ({ onSubmit }) => {
+const InitialPageInput = ({ onSubmit, setUploadedPreview }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUploadedPreview(reader.result); // Generate preview from uploaded image
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +47,7 @@ const InitialPageInput = ({ onSubmit }) => {
           type="file"
           className="hidden-file-input"
           accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])}
+          onChange={handleImageUpload}
         />
         <textarea
           className="chat-textarea"

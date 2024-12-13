@@ -1,20 +1,88 @@
+.chat-response-container {
+  position: relative; /* To position the gradient overlay */
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 855px; /* Limit width for responsiveness */
+  background-color: #f8f8f8; /* Light blue background for the response area */
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.chat-response-container::before {
+  content: ""; /* Pseudo-element to create the gradient */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(248, 248, 248, 1), rgba(248, 248, 248, 0));
+  pointer-events: none; /* Ensure it doesn’t block interactions */
+  z-index: 1; /* Place it above the text */
+}
+
+.chat-response-container::after {
+  content: ""; /* Pseudo-element for the gradient */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px; /* Height of the gradient */
+  background: linear-gradient(to top, rgba(248, 248, 248, 1), rgba(248, 248, 248, 0));
+  pointer-events: none; /* Ensure it doesn’t block interactions */
+  z-index: 1; /* Place it above the text */
+}
+
 .chat-response {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 150px; /* Height of the response box */
-    width: 100%;
-    max-width: 800px; /* Limit width for responsiveness */
-    margin: 20px 0; 
-    background-color: #f8f8f8; /* Light blue background for the response area */
-  }
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  max-width: 855px; /* Limit width for responsiveness */
+  background-color: #f8f8f8; /* Light blue background for the response area */
+  overflow-y: auto;
+}
+
+.viewport-centered-container {
+  position: absolute; 
+  top: 45%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); /* Offset by half the container's size */
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; /* Vertically center the content */
+  justify-content: center; /* Horizontally center the content */
+  text-align: center; /* Center align text */
+  pointer-events: none;
+}
+
+.viewport-centered-container-diagnosis {
+  position: absolute; 
+  top: 52%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); /* Offset by half the container's size */
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; /* Vertically center the content */
+  justify-content: center; /* Horizontally center the content */
+  text-align: center; /* Center align text */
+  pointer-events: none;
+}
   
 .response-text {
-    font-size: 28px; /* Font size for response */
-    color: #242424; /* Neutral dark color for text */
-    text-align: center; /* Center-align text */
-    font-family: "Arial", sans-serif;
-    padding: 10px;
+  font-size: 28px; /* Font size for response */
+  color: #242424; /* Neutral dark color for text */
+  text-align: center; /* Center-align text */
+  font-family: "Arial", sans-serif;
+  padding: 10px;
+  pointer-events: all;
 }
 
 .diagnosis-response {
@@ -24,7 +92,9 @@
   font-family: "Arial", sans-serif;
   word-break: keep-all;
   line-height: 1.75;
-  padding: 10px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  pointer-events: all;
 }
   
 .default-text {
@@ -33,6 +103,7 @@
     text-align: center;
     font-family: "Arial", sans-serif;
     padding: auto auto;
+    pointer-events: all;
 }
 
 .image-container {
@@ -50,30 +121,98 @@
     height: auto;
     border-radius: 16px; /* Rounded corners */
 }
+/**/
+.diagnosis-summary-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.diagnosis-circles {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 40px;
+}
+
+.diagnosis-circle {
+  width: 150px;
+  height: 150px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255,255,255);
+  color: rgb(36,36,36);
+  opacity: 0.65;
+  font-size: 17px;
+  padding: 20px;
+  pointer-events: all;
+  box-shadow: 0 2 3px rgba(0, 0, 0, 0.01);
+  transition: transform 0.45s ease, opacity 0.45s ease, font-weight 0.15s ease;
+}
+
+.diagnosis-circle:hover {
+  opacity: 1; 
+  transform: scale(1.1); 
+  font-weight: bold;
+  box-shadow: 0 4 6px rgba(0, 0, 0, 0.1);
+}
+
+.diagnosis-variable-text {
+  font-size: 20px;
+  color: #242424; 
+  text-align: center;
+  font-family: "Arial", sans-serif;
+  word-break: keep-all;
+  line-height: 1.75;
+  margin-top: 20px;
+  margin-bottom: 0px;
+  pointer-events: all;
+}
 
 /**/
 .chat-interface {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  max-height: 400px;
+  justify-content: start;
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+  max-height: 800px;
   overflow-y: auto;
+  margin-bottom: 10px;
 }
 
 .chat-message {
-  padding: 10px;
+  margin-top: 24px;
+  padding: 12px 16px;
   border-radius: 4px;
   max-width: 70%;
+  line-height: 1.7;
 }
 
 .user-message {
   text-align: right;
-  background-color: #e6f7ff;
+  background-color: #ffffff;
+  color: #242424;
   margin-left: auto;
+  border: 1px solid #f4f4f4;
+  border-radius: 14px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.007);
 }
 
 .bot-message {
   text-align: left;
-  background-color: #f5f5f5;
+  background-color: #f8f8f8;
+  color: #242424;
   margin-right: auto;
+}
+
+.bot-logo {
+  height: 14px;
+  opacity: 0.4;
+  margin: 5px 0px;
 }

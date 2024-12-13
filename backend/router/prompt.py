@@ -7,8 +7,10 @@ from ml.rag.conversation import (
     make_candidates, 
     retrieve_context, 
     generate_question, 
+    reason_diagnosis, 
     diagnose, 
-    eliminate_disease
+    eliminate_disease,
+    faq
 )
 
 # Single global session variable
@@ -40,7 +42,7 @@ async def process(
     session["context"] = retrieve_context(candidates)
 
     # Generate the first question based on the retrieved context
-    first_question = generate_question(session["context"])
+    first_question = generate_question(session["context"], session["conversation"])
     session["conversation"].append(first_question)
     print(session)
 
@@ -78,18 +80,20 @@ async def handle_user_response(data: UserResponseData):
     # If only one disease remains, finalize the diagnosis
     diseases = list(session["context"].keys())
     if len(diseases) <= 1:
+        reason = reason_diagnosis(session["context"], session["conversation"])
+        reason_len = len(reason.split("\n"))
         diagnosis = diagnose(session["context"])
         session["conversation"].append(diagnosis)
         print(session)
         return {
-            "response": diagnosis,
+            "response": f"{diseases[0]}\n{reason_len}\n {reason} \n{diagnosis}",
             "updated_context": session["context"],
             "diagnosis_finalized": True,
         }
 
     # Generate new question
     else:
-        new_question = generate_question(session["context"])
+        new_question = generate_question(session["context"], session["conversation"])
         session["conversation"].append(new_question)
         print(session)
         return {
@@ -114,10 +118,8 @@ async def handle_faq(
     global session
     session["conversation"].append(symptoms)
 
-    faq_response = faq(query, session["context"], session["conversation"], image)
-
-    session["conversation"].append(f"User: {query}")
-    session["conversation"].append(f"Bot: {faq_response}")
+    faq_response = faq(symptoms, session["context"], session["conversation"], image)
+    session["conversation"].append(faq_response)
 
     return {
         "response": faq_response,
