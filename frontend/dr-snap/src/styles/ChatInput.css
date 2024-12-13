@@ -4,9 +4,9 @@
     justify-content: center;
     width: 100%;
     max-width: 860px;
-    padding: 40px; /* Add more padding for input */
-    margin-bottom: 20px;
-    background-color: #f8f8f8; /* Match the app's clean aesthetic */
+    padding: 0px 40px 40px 40px;
+    margin-bottom: 28px;
+    background-color: #f8f8f8;
 }
 
 .textarea-container {
@@ -55,24 +55,6 @@
 
 .chat-textarea:focus::placeholder {
   opacity: 0;
-}
-
-.chat-textarea::-webkit-scrollbar {
-    display: none;
-}
-
-.chat-textarea:hover::-webkit-scrollbar {
-    display: block;
-    height: 4px;
-}
-
-.chat-textarea:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(100, 100, 100, 0.1);
-    border-radius: 2px;
-}
-
-.chat-textarea:hover::-webkit-scrollbar-track {
-    background: transparent;
 }
 
 .hidden-file-input {

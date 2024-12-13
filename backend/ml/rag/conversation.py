@@ -32,7 +32,7 @@ def make_candidates(query, image):
 
     from_text = ""
     from_image = ""
-    for i in range(10):
+    for i in range(len(retrieved_from_img)):
         from_text += f"{retrieved_from_query[i]} \n"
         from_image += f"{retrieved_from_img[i]} \n"
 
@@ -95,11 +95,15 @@ def retrieve_context(candidates):
 
 
 # Generate elimination questions
-def generate_question(retrieved_context):
+def generate_question(retrieved_context, conversation):
     messages = [
         {
             "role": "system", 
-            "content": "당신은 피부과 전문의입니다. 캐주얼한 대화 방식으로 진료를 진행해주세요."
+            "content": f"""
+            당신은 피부과 전문의입니다. 
+            캐주얼한 대화 방식으로 진료를 진행해주세요. 
+            환자와의 대화: {conversation}, 
+            환자와의 대화에 이미 질문이 있다면 비슷한 내용의 질문은 피해주세요."""
         },
         {
             "role": "user",
@@ -112,7 +116,10 @@ def generate_question(retrieved_context):
         },
         {
             "role": "user", 
-            "content": f"후보 질병: {retrieved_context}. 후보 질병 중에서 해당되지 않을 것 같은 질병 하나를 소거하기 위해 환자에게 추가적으로 해야할 질문을 생성해주세요. 답은 예 또는 아니오로 할 수 있어야 합니다."
+            "content": f"""후보 질병: {retrieved_context}, 
+            후보 질병 중에서 해당되지 않을 것 같은 질병 하나를 소거하기 위해 환자에게 추가적으로 해야할 질문을 생성해주세요. 
+            질문은 후보 질병들 간의 차이점을 중심으로 생성하고, 답은 예 또는 아니오로 할 수 있어야 합니다.
+            """
         }
     ]
     
@@ -152,6 +159,35 @@ def eliminate_disease(context, conversation):
 
     return response.choices[0].message.content
 
+# Reason for Diagnosis
+def reason_diagnosis(context, conversation):    
+    messages = [
+        {
+            "role": "system", 
+            "content": """당신은 피부과 전문의입니다. 문구는 짧고 간결해야 합니다. "1. ~"와 같은 numbering 또는 "- ~"와 같은 itemizing 은 배제해주세요."""
+        },
+        {
+            "role": "assistant",
+            "content": "저녁에 심한 가려움 \n 아토피성 피부염 가족력 \n 긁어서 생긴 피부의 습진성 변화"
+        },
+        {
+            "role": "user", 
+            "content": f"""
+            후보 질병: {context},
+            환자의 증상: {conversation},
+            환자의 증상 중 후보 질병의 정보에 해당되는 문구가 있으면 추출 후 간결한 문구로 재구성해주세요. 추출한 문구의 개수와 생성하는 문구의 개수가 같아야 합니다.
+            """
+        }
+    ]
+    
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages
+    )
+    print(response.choices[0].message.content)
+
+    return response.choices[0].message.content
+
 # Final Diagnosis
 def diagnose(context):
     messages = [
@@ -161,22 +197,21 @@ def diagnose(context):
             친근하고 캐주얼하게 환자와의 진료를 진행해주세요. 
             답변 중 이야기의 내용(e.g. 설명, 행동지침, 격려)이 바뀌면 Enter를 통해 줄 바꿈을 해주세요.
             항목화(itemization, e.g.: **피부관리**) 없이 답변을 작성해주세요.
+            "~를 진단 받으셨군요."와 같은 멘트 없이 바로 질병에 대한 설명을 적어주세요.
             """
         },
         {
             "role": "assistant",
             "content": """
             악성 흑색종은 멜라닌 세포에서 발생하는 피부암으로, 피부뿐만 아니라 점막, 눈 등 다양한 부위에 생길 수 있는데요.
-            초기에는 작은 점이나 변색으로 보일 수 있으나 빠르게 진행하면 생명을 위협할 수 있습니다. 주요 증상으로는
-            비대칭적인 점, 경계가 불규칙한 점,  다양한 색조를 가진 점, 점의 크기 변화 등이 있어요.
-            햇빛 노출이 주요 위험 요인이므로 자외선 차단제를 사용하고 직사광선을 피하는 것이 좋아요.
+            초기에는 작은 점이나 변색으로 보일 수 있으나 빠르게 진행하면 생명을 위협할 수 있습니다. 
 
             가능한 빨리 병원을 방문하여 점의 변화를 의사와 상담하고 필요한 경우 조직 검사를 받으세요.
             진단 결과에 따라 수술, 방사선 치료, 항암 요법 등 적합한 치료법이 결정됩니다. 치료 후에도 정기적으로
             검진을 받아 재발 여부를 확인하고, 의사의 권고를 철저히 따르세요. 기존 점이나 새로운 점의 변화를 지속적으로 관찰하며,
             필요 시 빠르게 의료진과 상의하세요.
 
-            악성 흑색종은 조기 발견 시 예후가 좋으니, 너무 걱정하지는 마시고 작은 변화라도 놓치지 않는 것이 중요해요 :)
+            악성 흑색종은 조기 발견 시 예후가 좋으니 걱정마시고 작은 변화라도 놓치지 않는 것이 중요해요 :)
             """
         },
         {
@@ -184,7 +219,7 @@ def diagnose(context):
             "content": f"""
             환자 질병에 대한 정보: {context},
             
-            위의 질병을 진단 받은 환자에게 질병에 대한 간단한 설명, 간단한 행동지침, 격려를 포함해 해줘야 할 말을 해주세요.
+            위 질병에 대한 2 문장 이내의 간단한 설명, 위 질병을 진단받은 환자가 취해야할 행동지침 그리고 2 문장 이내의 짧은 격려를 해주세요.
             """
         }
     ]
@@ -206,6 +241,9 @@ def faq(query, context, conversation, image):
             "role": "system", 
             "content": """당신은 피부과 전문의입니다. 
             친근하고 캐주얼하게 환자와의 진료를 진행해주세요.
+            당신은 현재 환자와 말로 대화하고 있음을 인지하세요.
+            자세한 설명이 필요하지 않은 경우엔 답변을 짧고 간결하게 해주세요.
+            '안녕하세요'와 같은 인사는 생략해도 됩니다.
             """
         }
     ]
