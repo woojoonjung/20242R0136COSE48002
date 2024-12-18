@@ -1,10 +1,25 @@
+######################################################################################################
+# **대화 흐름 제어 파일**                                                                                 #
+#                                                                                                    #
+# make_candidates: 사용자가 입력한 사진과 증상 텍스트를 기반으로 가장 유력한 후보질환 3개 추출                         #
+# retrieve_context: 아산병원 질병백과로부터 해당 후보질환에 대한 상세 정보 가져와 context 라는 dictionary 구성         #
+# generate_question: 후보질환을 하나씩 소거하기 위해 사용자에게 해야할 질문 생성, 단 사용자로부터 답변은 O/X 형태로 받음    #
+# eliminate_disease: 환자와의 대화기록과 context를 기반으로 후보질환 중 한 개를 소거해달라 요청                      #
+# reason_diagnosis: 소거 및 진단에 대한 근거를 환자와의 대화와 context를 대조하여 문구를 추출                        #
+# diagnose: 최종 후보질환, 근거 문구, context에 있는 전문지식을 기반으로 환자에게 보여줄 최종 진단 텍스트 생성             #
+# faq: 최종진단, 환자와의 대화, context 전문지식을 컨텍스트로 제공받은 상태에서 사용자와 자유로운 대화 진행                 #
+#                                                                                                    #
+# by woojoonjung at korea univ.                                                                      #
+# contact: smallthingsmatter729@gmail.com                                                            #
+######################################################################################################
+
 import sys, os
 import base64
 from dotenv import load_dotenv
 import numpy as np
 from openai import OpenAI
-from ml.rag.retriever import Retriever
-from ml.rag.utils import (
+from ml.retriever import Retriever
+from ml.utils import (
     load_documents, 
     google_lens, 
 )
@@ -50,23 +65,53 @@ def make_candidates(query, image):
             "role": "system", 
             "content": """
             당신은 피부과 전문의입니다. 
-            질병 추측 시 "*** from symptom image ***" 아래에 등장하는 질병들을 모두 고려하되 "*** from symptom text ***" 이후의 질병 이름들만 추측에 사용해주세요.
+            질병 3개 추측 시 분석 결과에 등장하는 질병들을 모두 고려해주세요. 
+            답변에는 "*** from symptom text ***" 이후의 질병 이름들만 사용해주세요.
             답변은 부연 설명 없이 오직 질병의 이름만 나열해주세요.
+            """
+        },
+        {
+            "role": "user", 
+            "content": f"""
+            --분석 결과--
+            *** from symptom image ***
+            ('Genital herpes', 0.7341) 
+            ('Herpes simplex virus', 0.7286) 
+            ('Shingles', 0.7228) 
+            ('Skin rash', 0.7043) 
+            ('Vesicle', 0.7028) 
+            ('Virus', 0.6984) 
+            ('Infection', 0.6894) 
+            ('Sexually transmitted infection', 0.6761) 
+            ('Skin condition', 0.6654) 
+            ('Genital sores', 0.6182) 
+            ---
+            *** from symptom text ***
+            ('Impetigo', 0.7506076) 
+            ('Pemphigus', 0.7113795) 
+            ('Hand Eczema', 0.70565295) 
+            ('Acute vesiculobullous hand eczema', 0.7052216) 
+            ('Eczema', 0.705003) 
+            ('Erythema intertrigo', 0.6996006) 
+            ('Herpes Simplex', 0.6950346) 
+            ('Postzoster neuralgia', 0.67210853) 
+            ('Pityriasis versicolor', 0.6627843) 
+            ('Wart', 0.658268) 
+            숫자는 해당 질병일 가능성을 나타냅니다. 가장 가능성이 높은 질병 3개만 추측해주세요."""
+        },
+        {
+            "role": "assistant",
+            "content": """
+            Herpes Simplex
+            Impetigo
+            Pemphigus
             """
         },
         {
             "role": "user", 
             "content": f"""--분석 결과--
             {analysis}
-            숫자는 해당 질병일 확률을 나타냅니다. 가장 가능성이 높은 질병 3개만 추측해주세요."""
-        },
-        {
-            "role": "assistant",
-            "content": """
-            Malignant melanoma
-            Nevus flammeus
-            Skin cancer
-            """
+            숫자는 해당 질병일 가능성을 나타냅니다. 가장 가능성이 높은 질병 3개만 추측해주세요."""
         }
     ]
     
