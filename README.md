@@ -23,7 +23,7 @@ openAI의 API에 대한 권한과 API키를 취득한 후 .env파일을 구성�
 후에 .env 파일은 다음 위치에 저장해주세요.   
 > backend/ml/rag
       
-### 사용법
+### 시작
 다음 스크립트를 통해 백엔드 서버를 실행해주세요.   
 ```sh
 cd backend   

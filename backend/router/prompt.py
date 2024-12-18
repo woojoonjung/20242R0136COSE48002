@@ -1,9 +1,20 @@
+######################################################################################################
+# **엔드포인트들을 관리하는 라우터 파일**                                                                     #
+#                                                                                                    #
+# /initial: 사용자가 입력한 사진과 증상 텍스트를 기반으로 가장 유력한 후보질환 3개 추출 그리고 첫 질문 생성                #
+# /click: 사용자로부터 생성된 질문에 대해 O,X 답변을 받는 엔드포인트                                              #
+# /faq: 사용자와 자유롭게 대화                                                                            #
+#                                                                                                    #
+# by woojoonjung at korea univ.                                                                      #
+# contact: smallthingsmatter729@gmail.com                                                            #
+######################################################################################################
+
 import os
 import sys
 from typing import Dict, List, Optional
 from fastapi import APIRouter, File, UploadFile, Form, FastAPI
 from pydantic import BaseModel
-from ml.rag.conversation import (
+from ml.conversation import (
     make_candidates, 
     retrieve_context, 
     generate_question, 

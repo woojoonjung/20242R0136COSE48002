@@ -1,3 +1,14 @@
+######################################################################################################
+# **구글 클라우드 비전 API와 기타 필요한 함수들이 있는 파일**                                                     #
+#                                                                                                    #
+# load_documents: 문서 로딩                                                                            #
+# find_entity_by_name: 지식 베이스로부터 name 질병의 정보들 가져오기                                           #
+# google_image_search: 구글 api를 통한 라벨 디텍션                                                         #
+#                                                                                                    #
+# by woojoonjung at korea univ.                                                                      #
+# contact: smallthingsmatter729@gmail.com                                                            #
+######################################################################################################
+
 import os, json, io
 import requests
 import re
